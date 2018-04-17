@@ -36,8 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func getURLList()->[URL]?{
         let keys: [URLResourceKey] = [.volumeNameKey,.volumeIsRemovableKey, .volumeIsEjectableKey]
-        let paths = FileManager().mountedVolumeURLs(includingResourceValuesForKeys: keys, options: [])
-        if var urls = paths {
+        if var urls = FileManager().mountedVolumeURLs(includingResourceValuesForKeys: keys, options: []) {
             for url in urls{
                 let components = url.pathComponents
                 if components.count <= 1 || components[1] != "Volumes"{
@@ -57,6 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = statusMenu
         let icon = NSImage(named: NSImage.Name(rawValue: "ejectionseatIcon"))
         statusItem.image = icon
+        statusItem.image?.isTemplate = true
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
