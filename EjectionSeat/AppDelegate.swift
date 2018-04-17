@@ -54,7 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to initialize your application
         //statusItem.title = "EjectionSeat"
         statusItem.menu = statusMenu
-        let icon = NSImage(named: NSImage.Name(rawValue: "ejectionseatIcon"))
+        let icon = NSImage(named: NSImage.Name(rawValue: "USBIcon"))
         statusItem.image = icon
         statusItem.image?.isTemplate = true
     }
