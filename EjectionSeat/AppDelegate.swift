@@ -12,7 +12,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-    var menu: NSMenu = NSMenu()
+    let menu: NSMenu = NSMenu()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //statusItem.title = "EjectionSeat"
@@ -31,7 +31,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.setSubmenu(makeSubMenu(), for: (menu.item(withTitle: "Eject"))!)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(AppDelegate.quit(_:)), keyEquivalent: "q"))
-        
     }
     
     func menuNeedsUpdate(_ menu: NSMenu) {
@@ -43,10 +42,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             return nil
         }
         let subMenu = NSMenu()
-        var numKey = 0
+        var titles: [String] = []
         for url in urls {
+            titles.append(url.pathComponents[url.pathComponents.endIndex-1])
+        }
+        titles = titles.sorted{$0.caseInsensitiveCompare($1) == .orderedAscending}
+        var numKey = 0
+        for title in titles {
         numKey += 1
-            subMenu.addItem(NSMenuItem(title: url.pathComponents[url.pathComponents.endIndex-1], action: #selector(AppDelegate.eject(_:)), keyEquivalent: "\(numKey)"))
+            subMenu.addItem(NSMenuItem(title: title, action: #selector(AppDelegate.eject(_:)), keyEquivalent: "\(numKey)"))
         }
         return subMenu
     }
@@ -97,11 +101,5 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
         return urls;
     }
-    
-    
-    func applicationWillTerminate(_ aNotification: Notification) {
-    }
-    
-    
 }
 
