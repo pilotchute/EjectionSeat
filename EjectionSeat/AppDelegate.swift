@@ -35,7 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func getURLList()->[URL]?{
-        let keys: [URLResourceKey] = [.volumeNameKey,.volumeIsRemovableKey, .volumeIsEjectableKey]
+        let keys: [URLResourceKey] = [.volumeNameKey, .volumeIsRemovableKey, .volumeIsEjectableKey]
         if var urls = FileManager().mountedVolumeURLs(includingResourceValuesForKeys: keys, options: []) {
             for url in urls{
                 let components = url.pathComponents
