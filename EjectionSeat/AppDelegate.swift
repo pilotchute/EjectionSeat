@@ -13,8 +13,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     let menu: NSMenu = NSMenu()
-    var noteCounter: Int = 0
-    var attemptCounter: Int = 0
     var lastDrive: String = ""
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -34,7 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
             menu.addItem(NSMenuItem(title: "Eject", action: nil, keyEquivalent: ""))
             menu.setSubmenu(subMenu, for: (menu.item(withTitle: "Eject"))!)
         } else {
-            menu.addItem(NSMenuItem(title: "No Drives Attached", action: nil, keyEquivalent: ""))
+            menu.addItem(NSMenuItem(title: "Nothing to eject", action: nil, keyEquivalent: ""))
         }
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(AppDelegate.quit(_:)), keyEquivalent: "q"))
@@ -70,10 +68,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
             if url.pathComponents[url.pathComponents.endIndex-1] == sender.title {
                 lastDrive = sender.title
                 guard (try? NSWorkspace().unmountAndEjectDevice(at: url)) != nil else {
-                    showNotificationFailure("Eject Error", "The drive “\(lastDrive)” failed to eject.")
+                        showNotificationFailure()
                     return
                 }
-                showNotificationSuccess("Eject Successful!", "Your drive “\(lastDrive)” is safe.")
+                showNotificationSuccess()
             }
         }
     }
@@ -88,11 +86,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
                 lastDrive = url.pathComponents[url.pathComponents.endIndex-1]
                 guard (try? NSWorkspace().unmountAndEjectDevice(at: url)) != nil else {
                     if !hideError {
-                        showNotificationFailure("\(lastDrive)", "Failed to eject.")
+                        showNotificationFailure()
                     }
                     continue
                 }
-                showNotificationSuccess("\(lastDrive)", "Ejected safely!")
+                showNotificationSuccess()
                 anySuccess = true
             }
             keepGoing = hideError
@@ -100,12 +98,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         }
     }
     
-    func showNotificationSuccess(_ title: String, _ text: String) {
-        noteCounter += 1
+    func showNotificationSuccess() {
         let notification = NSUserNotification()
-        notification.identifier = "Notification \(noteCounter)"
-        notification.title = title
-        notification.informativeText = text
+        notification.identifier = "Success \(lastDrive)"
+        notification.title = "\(lastDrive)"
+        notification.informativeText = "Ejected safely!"
         notification.soundName = NSUserNotificationDefaultSoundName
         notification.hasActionButton = false
         notification.otherButtonTitle = "Dismiss"
@@ -113,12 +110,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         NSUserNotificationCenter.default.deliver(notification)
     }
     
-    func showNotificationFailure(_ title: String, _ text: String) {
-        noteCounter += 1
+    func showNotificationFailure() {
         let notification = NSUserNotification()
-        notification.identifier = "Notification \(noteCounter)"
-        notification.title = title
-        notification.informativeText = text
+        notification.identifier = "Failure \(lastDrive)"
+        notification.title = "\(lastDrive)"
+        notification.informativeText = "Failed to eject."
         notification.soundName = NSUserNotificationDefaultSoundName
         notification.hasActionButton = true
         notification.otherButtonTitle = "Dismiss"
