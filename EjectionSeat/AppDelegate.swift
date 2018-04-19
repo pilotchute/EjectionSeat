@@ -29,9 +29,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     
     func makeMenu(){
         menu.removeAllItems()
-        menu.addItem(NSMenuItem(title: "Eject All", action: #selector(AppDelegate.ejectAll(_:)), keyEquivalent: "e"))
-        menu.addItem(NSMenuItem(title: "Eject", action: nil, keyEquivalent: ""))
-        menu.setSubmenu(makeSubMenu(), for: (menu.item(withTitle: "Eject"))!)
+        if let subMenu = makeSubMenu() {
+            menu.addItem(NSMenuItem(title: "Eject All", action: #selector(AppDelegate.ejectAll(_:)), keyEquivalent: "e"))
+            menu.addItem(NSMenuItem(title: "Eject", action: nil, keyEquivalent: ""))
+            menu.setSubmenu(subMenu, for: (menu.item(withTitle: "Eject"))!)
+        } else {
+            menu.addItem(NSMenuItem(title: "No Drives Attached", action: nil, keyEquivalent: ""))
+        }
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(AppDelegate.quit(_:)), keyEquivalent: "q"))
     }
@@ -41,9 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     }
     
     @objc func makeSubMenu() -> NSMenu?{
-        guard let urls = getURLList(), urls.count > 0 else {
-            return nil
-        }
+        guard let urls = getURLList(), urls.count > 0 else { return nil }
         let subMenu = NSMenu()
         var titles: [String] = []
         for url in urls {
@@ -58,52 +60,44 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         return subMenu
     }
     
+    @objc func quit(_ sender: NSMenuItem) {
+        NSApplication.shared.terminate(self)
+    }
+    
     @objc func eject(_ sender: NSMenuItem){
-        guard let urls = getURLList(), urls.count > 0 else {
-            return
-        }
+        guard let urls = getURLList(), urls.count > 0 else { return }
         for url in urls {
             if url.pathComponents[url.pathComponents.endIndex-1] == sender.title {
                 lastDrive = sender.title
-                FileManager().unmountVolume(at: url, options: [.allPartitionsAndEjectDisk, .withoutUI], completionHandler: ejectionhandle)
-            }
-        }
-    }
-    
-    func ejectString(_ name: String){
-        guard let urls = getURLList(), urls.count > 0 else {
-            return
-        }
-        for url in urls {
-            if url.pathComponents[url.pathComponents.endIndex-1] == name {
-                lastDrive = name
-                FileManager().unmountVolume(at: url, options: [.allPartitionsAndEjectDisk, .withoutUI], completionHandler: ejectionhandle)
+                guard (try? NSWorkspace().unmountAndEjectDevice(at: url)) != nil else {
+                    showNotificationFailure("Eject Error", "The drive “\(lastDrive)” failed to eject.")
+                    return
+                }
+                showNotificationSuccess("Eject Successful!", "Your drive “\(lastDrive)” is safe.")
             }
         }
     }
     
     @objc func ejectAll(_ sender: NSMenuItem) {
-        guard let urls = getURLList(), urls.count > 0 else {
-            return
+        var hideError = true
+        var keepGoing = true
+        while keepGoing {
+            var anySuccess = false
+            guard let urls = getURLList(), urls.count > 0 else { return }
+            for url in urls {
+                lastDrive = url.pathComponents[url.pathComponents.endIndex-1]
+                guard (try? NSWorkspace().unmountAndEjectDevice(at: url)) != nil else {
+                    if !hideError {
+                        showNotificationFailure("\(lastDrive)", "Failed to eject.")
+                    }
+                    continue
+                }
+                showNotificationSuccess("\(lastDrive)", "Ejected safely!")
+                anySuccess = true
+            }
+            keepGoing = hideError
+            hideError = anySuccess
         }
-        
-        for url in urls {
-            lastDrive = url.pathComponents[url.pathComponents.endIndex-1]
-            FileManager().unmountVolume(at: url, options: [.allPartitionsAndEjectDisk, .withoutUI], completionHandler: ejectionhandle)
-        }
-        
-    }
-    
-    @objc func quit(_ sender: NSMenuItem) {
-        NSApplication.shared.terminate(self)
-    }
-    
-    func ejectionhandle(_ error: Error?) {
-        guard let errorData: Error = error else {
-            showNotificationSuccess("Eject Successful!", "Your drive “\(lastDrive)” is safe.")
-            return
-        }
-        showNotificationFailure("Eject Error", errorData.localizedDescription)
     }
     
     func showNotificationSuccess(_ title: String, _ text: String) {
@@ -134,8 +128,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification){
-        let name: String = ((notification.informativeText?.components(separatedBy: "“")[1])?.components(separatedBy: "”")[0])!
-        ejectString(name)
+        eject(NSMenuItem(title: notification.title!, action: nil, keyEquivalent: ""))
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
@@ -149,7 +142,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         }
         for url in urls{
             let components = url.pathComponents
-            if components.count <= 1 || components[1] != "Volumes"{
+            if components.count < 2 || components[1] != "Volumes"{
                 urls.remove(at: urls.index(of: url)!)
             }
         }
