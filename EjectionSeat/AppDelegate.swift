@@ -13,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     let menu: NSMenu = NSMenu()
-    var lastDrive: String = ""
+    var lastVolume: String = ""
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //statusItem.title = "EjectionSeat"
@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         guard let urls = getURLList(), urls.count > 0 else { return }
         for url in urls {
             if url.pathComponents[url.pathComponents.endIndex-1] == sender.title {
-                lastDrive = sender.title
+                lastVolume = sender.title
                 guard (try? NSWorkspace().unmountAndEjectDevice(at: url)) != nil else {
                         showNotificationFailure()
                     return
@@ -83,7 +83,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
             var anySuccess = false
             guard let urls = getURLList(), urls.count > 0 else { return }
             for url in urls {
-                lastDrive = url.pathComponents[url.pathComponents.endIndex-1]
+                lastVolume = url.pathComponents[url.pathComponents.endIndex-1]
                 guard (try? NSWorkspace().unmountAndEjectDevice(at: url)) != nil else {
                     if !hideError {
                         showNotificationFailure()
@@ -100,8 +100,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     
     func showNotificationSuccess() {
         let notification = NSUserNotification()
-        notification.identifier = "Success \(lastDrive)"
-        notification.title = "\(lastDrive)"
+        notification.identifier = "Success \(lastVolume)"
+        notification.title = "\(lastVolume)"
         notification.informativeText = "Ejected safely!"
         notification.soundName = NSUserNotificationDefaultSoundName
         notification.hasActionButton = false
@@ -112,8 +112,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     
     func showNotificationFailure() {
         let notification = NSUserNotification()
-        notification.identifier = "Failure \(lastDrive)"
-        notification.title = "\(lastDrive)"
+        notification.identifier = "Failure \(lastVolume)"
+        notification.title = "\(lastVolume)"
         notification.informativeText = "Failed to eject."
         notification.soundName = NSUserNotificationDefaultSoundName
         notification.hasActionButton = true
