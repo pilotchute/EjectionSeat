@@ -17,8 +17,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     var lastVolume: String = ""
     let version: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
     
-    func delay(_ seconds: Double, codeBlock: @escaping () -> Void){
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: codeBlock)
+    func delay(_ seconds: Int, block: @escaping () -> Void){
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(seconds), execute: block)
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -172,12 +172,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
-        if !notification.hasActionButton {
-            delay(3) {
-                print(notification)
-                NSUserNotificationCenter.default.removeDeliveredNotification(notification)
-            }
-        }
+        notification.hasActionButton ?
+            delay(60){NSUserNotificationCenter.default.removeDeliveredNotification(notification)} :
+            delay(3){NSUserNotificationCenter.default.removeDeliveredNotification(notification)}
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
