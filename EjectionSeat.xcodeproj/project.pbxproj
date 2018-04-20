@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23522187208A878C00496089 /* Success.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 23522186208A878C00496089 /* Success.aiff */; };
+		23522189208A879400496089 /* Failure.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 23522188208A879400496089 /* Failure.aiff */; };
 		23DA2E08208680C800705F14 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DA2E07208680C800705F14 /* AppDelegate.swift */; };
 		23DA2E0A208680C900705F14 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23DA2E09208680C900705F14 /* Assets.xcassets */; };
 		23DA2E0D208680C900705F14 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23DA2E0B208680C900705F14 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23522186208A878C00496089 /* Success.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Success.aiff; sourceTree = "<group>"; };
+		23522188208A879400496089 /* Failure.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Failure.aiff; sourceTree = "<group>"; };
 		23DA2E04208680C800705F14 /* EjectionSeat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EjectionSeat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23DA2E07208680C800705F14 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		23DA2E09208680C900705F14 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -54,6 +58,8 @@
 				23DA2E07208680C800705F14 /* AppDelegate.swift */,
 				23DA2E09208680C900705F14 /* Assets.xcassets */,
 				23DA2E0B208680C900705F14 /* MainMenu.xib */,
+				23522186208A878C00496089 /* Success.aiff */,
+				23522188208A879400496089 /* Failure.aiff */,
 				23DA2E0E208680C900705F14 /* Info.plist */,
 				23DA2E0F208680C900705F14 /* EjectionSeat.entitlements */,
 			);
@@ -118,7 +124,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23522189208A879400496089 /* Failure.aiff in Resources */,
 				23DA2E0A208680C900705F14 /* Assets.xcassets in Resources */,
+				23522187208A878C00496089 /* Success.aiff in Resources */,
 				23DA2E0D208680C900705F14 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

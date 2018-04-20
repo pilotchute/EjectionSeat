@@ -21,6 +21,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(seconds), execute: block)
     }
     
+    func play(_ name: String){
+        let sound = NSSound(named: NSSound.Name(name))
+        sound?.play()
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //statusItem.title = "EjectionSeat"
         statusItem.image = NSImage(named: NSImage.Name("USBIcon"))
@@ -90,7 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutWindow?.orderFrontRegardless()
     }
     
-    @objc func makeSubMenu() -> NSMenu? {
+    func makeSubMenu() -> NSMenu? {
         guard let urls = getURLList(), urls.count > 0 else { return nil }
         let subMenu = NSMenu()
         var titles: [String] = []
@@ -151,7 +156,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         notification.identifier = "Success \(lastVolume)"
         notification.title = "\(lastVolume)"
         notification.informativeText = "Ejected safely!"
-        notification.soundName = NSUserNotificationDefaultSoundName
+        play("Success")
         notification.hasActionButton = false
         notification.otherButtonTitle = "Dismiss"
         NSUserNotificationCenter.default.delegate = self
@@ -163,7 +168,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         notification.identifier = "Failure \(lastVolume)"
         notification.title = "\(lastVolume)"
         notification.informativeText = "Failed to eject."
-        notification.soundName = NSUserNotificationDefaultSoundName
+        play("Failure")
         notification.hasActionButton = true
         notification.otherButtonTitle = "Dismiss"
         notification.actionButtonTitle = "Eject"
