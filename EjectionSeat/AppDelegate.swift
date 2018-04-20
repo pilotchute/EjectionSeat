@@ -15,8 +15,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     let menu: NSMenu = NSMenu()
     var aboutWindow: NSWindow?
     var lastVolume: String = ""
-    let version: String? = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-
+    let version: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+    
+    func delay(_ seconds: Double, codeBlock: @escaping () -> Void){
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: codeBlock)
+    }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //statusItem.title = "EjectionSeat"
@@ -24,7 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         statusItem.image?.isTemplate = true
         statusItem.menu = menu
         statusItem.menu?.delegate = self
-        makeMenu()
         makeAboutWindow()
     }
     
@@ -73,7 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutTextBody.textColor = NSColor.gray
         aboutTextBody.alignment = NSTextAlignment.center
         aboutTextBody.backgroundColor = NSColor.clear
-        aboutTextBody.insertText("Developed by Åustin Kootz\nVersion \(version!)")
+        aboutTextBody.insertText("Developed by Åustin Kootz\nVersion \(version)")
         aboutTextBody.isEditable = false
         
         aboutWindow = NSWindow.init(contentRect: aboutView.frame, styleMask: [.titled, .closable], backing: NSWindow.BackingStoreType.buffered, defer:false)
@@ -167,6 +169,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         notification.actionButtonTitle = "Eject"
         NSUserNotificationCenter.default.delegate = self
         NSUserNotificationCenter.default.deliver(notification)
+    }
+    
+    func userNotificationCenter(_ center: NSUserNotificationCenter, didDeliver notification: NSUserNotification) {
+        if !notification.hasActionButton {
+            delay(3) {
+                print(notification)
+                NSUserNotificationCenter.default.removeDeliveredNotification(notification)
+            }
+        }
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
