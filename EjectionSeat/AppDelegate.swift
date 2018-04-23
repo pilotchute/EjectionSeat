@@ -80,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutTextBody.textColor = NSColor.gray
         aboutTextBody.alignment = NSTextAlignment.center
         aboutTextBody.backgroundColor = NSColor.clear
-        aboutTextBody.insertText("Developed by Åustin Kootz\nVersion \(version)")
+        aboutTextBody.insertText("Developed by Austin Kootz\nVersion \(version)")
         aboutTextBody.isEditable = false
         
         aboutWindow = NSWindow.init(contentRect: aboutView.frame, styleMask: [.titled, .closable], backing: NSWindow.BackingStoreType.buffered, defer:false)
