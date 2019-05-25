@@ -63,6 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutView.addSubview(aboutTextTitle)
         aboutView.addSubview(aboutTextBody)
         
+        
         aboutImage.setFrameSize(NSSize(width: 192, height: 128))
         aboutImage.setFrameOrigin(NSPoint(x:0,y:96))
         aboutImage.imageAlignment = NSImageAlignment.alignCenter
@@ -72,7 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutTextTitle.textColor = NSColor.textColor
         aboutTextTitle.alignment = NSTextAlignment.center
         aboutTextTitle.backgroundColor = NSColor.clear
-        aboutTextTitle.insertText("EjectionSeat.app")
+        aboutTextTitle.string = "EjectionSeat.app"
         aboutTextTitle.isEditable = false
         
         aboutTextBody.setFrameOrigin(NSPoint(x:0,y:40))
@@ -80,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutTextBody.textColor = NSColor.gray
         aboutTextBody.alignment = NSTextAlignment.center
         aboutTextBody.backgroundColor = NSColor.clear
-        aboutTextBody.insertText("Developed by Austin Kootz\nVersion \(version)")
+        aboutTextBody.string = "Developed by Austin Kootz\nVersion \(version)"
         aboutTextBody.isEditable = false
         
         aboutWindow = NSWindow.init(contentRect: aboutView.frame, styleMask: [.titled, .closable], backing: NSWindow.BackingStoreType.buffered, defer:false)
