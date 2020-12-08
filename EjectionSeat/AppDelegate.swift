@@ -81,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutTextBody.textColor = NSColor.gray
         aboutTextBody.alignment = NSTextAlignment.center
         aboutTextBody.backgroundColor = NSColor.clear
-        aboutTextBody.string = "Developed by Austin Kootz\nVersion \(version)"
+        aboutTextBody.string = "Developed by Alea Kootz\nVersion \(version)"
         aboutTextBody.isEditable = false
         
         aboutWindow = NSWindow.init(contentRect: aboutView.frame, styleMask: [.titled, .closable], backing: NSWindow.BackingStoreType.buffered, defer:false)
