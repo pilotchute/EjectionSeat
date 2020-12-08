@@ -10,4 +10,4 @@ EjectionSeat can be installed using homebrew-cask
 brew cask install https://github.com/pilotchute/EjectionSeat/raw/master/ejectionseat.rb
 ```
 _  
-Austin Kootz
+Alea Kootz
