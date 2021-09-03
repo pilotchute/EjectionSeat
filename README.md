@@ -7,7 +7,7 @@ The latest release can be found [Here](https://github.com/pilotchute/EjectionSea
 
 EjectionSeat can be installed using homebrew-cask
 ```
-brew cask install https://github.com/pilotchute/EjectionSeat/raw/master/ejectionseat.rb
+brew install https://github.com/pilotchute/EjectionSeat/raw/master/ejectionseat.rb
 ```
 _  
 Alea Kootz
