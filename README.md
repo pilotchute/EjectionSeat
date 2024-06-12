@@ -5,9 +5,5 @@ These are typically USB drives, but .dmg files and other mountable formats are s
 It lives on the menu bar and provides a convenient and useful tool to the MAC OSX user experience.  
 The latest release can be found [Here](https://github.com/pilotchute/EjectionSeat/releases/latest)  
 
-EjectionSeat can be installed using homebrew-cask
-```
-wget https://github.com/pilotchute/EjectionSeat/raw/master/ejectionseat.rb; brew install ejectionseat.rb; rm ejectionseat.rb
-```
 _  
 Alea Kootz
