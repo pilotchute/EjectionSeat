@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  EjectionSeat
 //
-//  Created by Austin Kootz on 4/17/18.
-//  Copyright © 2018 Austin Kootz. All rights reserved.
+//  Created by Alea Kootz on 4/17/18.
+//  Copyright © 2024 Alea Kootz. All rights reserved.
 //
 
 import Cocoa
@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     let menu: NSMenu = NSMenu()
     var aboutWindow: NSWindow?
     var lastVolume: String = ""
-    let version: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+    let version: String = Bundle.main.infoDictionary?["CFBundleVersion"] as! String
     
     func delay(_ seconds: Int, block: @escaping () -> Void){
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(seconds), execute: block)
@@ -28,8 +28,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         //statusItem.title = "EjectionSeat"
-        statusItem.image = NSImage(named: NSImage.Name("USBIcon"))
-        statusItem.image?.isTemplate = true
+        statusItem.button?.image = NSImage(named: NSImage.Name("USBIcon"))
+        statusItem.button?.image?.isTemplate = true
         statusItem.menu = menu
         statusItem.menu?.delegate = self
         makeAboutWindow()
@@ -68,7 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutImage.setFrameOrigin(NSPoint(x:0,y:96))
         aboutImage.imageAlignment = NSImageAlignment.alignCenter
         
-        aboutTextTitle.setFrameOrigin(NSPoint(x:0,y:64))
+        aboutTextTitle.setFrameOrigin(NSPoint(x:0,y:60))
         aboutTextTitle.font = NSFont.titleBarFont(ofSize: 16)
         aboutTextTitle.textColor = NSColor.textColor
         aboutTextTitle.alignment = NSTextAlignment.center
@@ -76,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutTextTitle.string = "EjectionSeat.app"
         aboutTextTitle.isEditable = false
         
-        aboutTextBody.setFrameOrigin(NSPoint(x:0,y:40))
+        aboutTextBody.setFrameOrigin(NSPoint(x:0,y:24))
         aboutTextBody.font = NSFont.systemFont(ofSize: 12)
         aboutTextBody.textColor = NSColor.gray
         aboutTextBody.alignment = NSTextAlignment.center
@@ -88,7 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, NSUserNotifi
         aboutWindow?.contentView = aboutView
         aboutWindow?.backgroundColor = NSColor.windowBackgroundColor
         aboutWindow?.isReleasedWhenClosed = false
-        aboutWindow?.title = "About EjectionSeat"
+        aboutWindow?.title = "EjectionSeat.app"
     }
     
     @objc func aboutWindowDisplay(_ sender:NSMenuItem) {
